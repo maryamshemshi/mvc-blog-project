@@ -1,0 +1,21 @@
+{
+    "name": "dotcom/backend",
+    "authors": [
+        {
+            "name": "maryam",
+            "email": "maryam.shemshi.1381@gmail.com"
+        }
+    ],
+    "require": {
+      "ext-pdo": "*",
+      "ext-ldap": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\" : "src"
+        },
+        "files" : [
+          "src/Helpers/helper.php"
+        ]
+    }
+}

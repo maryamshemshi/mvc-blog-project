@@ -5,7 +5,7 @@
 </head>
 <body>
 
-  [contents]
+[contents]
 <footer class="bg-body-tertiary text-center">
     <div class="container p-4 pb-0">
         <section class="">
@@ -18,14 +18,16 @@
                     </div>
                     <div class="col-md-5 col-12">
                         <div data-mdb-input-init class="form-outline mb-4">
-                            <input type="email" id="form5Example26" class="form-control" />
+                            <input type="email" id="form5Example26" class="form-control"/>
                             <label class="form-label" for="form5Example26">Email address</label>
                         </div>
                     </div>
-                    <div  class="col-auto">
-                     <a href="/index"><button data-mdb-ripple-init type="submit" class="btn btn-primary mb-4">
-                            Subscribe
-                        </button></a>
+                    <div class="col-auto">
+                        <a href="/index">
+                            <button data-mdb-ripple-init type="submit" class="btn btn-primary mb-4">
+                                Subscribe
+                            </button>
+                        </a>
                     </div>
                 </div>
             </form>
@@ -36,8 +38,8 @@
     </div>
 </footer>
 <script>
-    import { Input, initMDB } from "mdb-ui-kit";
+    import {Input, initMDB} from "mdb-ui-kit";
 
-    initMDB({ Input });</script>
+    initMDB({Input});</script>
 </body>
 </html>

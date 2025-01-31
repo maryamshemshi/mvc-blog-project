@@ -1,8 +1,8 @@
 <?php
+
 namespace App;
 
 use App\Controllers\HomeController;
-use App\Database\MySQL\MySQLConnection;
 
 class App
 {
@@ -24,12 +24,12 @@ class App
         $controller->view();
         $callback = $this->router->resolve();
         if (is_array($callback)) {
-        $obj = new $callback[0];
-        $method = $callback[1];
-        $obj->$method();
-        call_user_func([$obj,$method]);
-    }else{
-            dd($callback());
+            $obj = new $callback[0];
+            $method = $callback[1];
+            $obj->$method();
+            call_user_func([$obj, $method]);
+        } else {
+            $callback();
         }
 
     }

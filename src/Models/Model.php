@@ -1,7 +1,11 @@
 <?php
+
 namespace App\Models;
+
 use App\Database\MySQL\MySQLConnection;
-class Model {
+
+class Model
+{
     protected $connection;
     protected $table;
 
@@ -41,14 +45,7 @@ class Model {
 
     public function orWhere(string $column, $value): Model
     {
-        $this->connection->where([$column => $value],"OR");
+        $this->connection->where([$column => $value], "OR");
         return $this;
     }
 }
-
-
-
-
-
-
-?>

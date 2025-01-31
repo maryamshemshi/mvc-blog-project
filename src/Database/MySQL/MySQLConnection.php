@@ -40,7 +40,8 @@ class MySQLConnection
      * creates PDO instance and saves it to $this->connection
      * this method is made private to avoid creating multiple instances
      */
-    private function __construct($host, $dbname, $username, $password) {
+    private function __construct($host, $dbname, $username, $password)
+    {
         try {
             $dsn = "mysql:host=$host;dbname=$dbname";
             $this->connection = new PDO($dsn, $username, $password);
@@ -53,7 +54,8 @@ class MySQLConnection
     /** use this method to get singleton instance of this class
      * @return MySQLConnection
      */
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (self::$instance == null) {
             self::$instance = new MySQLConnection('localhost', 'news_blog', 'root', '138179mm');
         }
@@ -72,29 +74,33 @@ class MySQLConnection
         return $this;
     }
 
-    public function where(array $where = [], string $operator= "AND"): MySQLConnection
+    public function where(array $where = [], string $operator = "AND"): MySQLConnection
     {
         $sql = empty($this->where) ? " WHERE " : " AND ";
         $whereSql = [];
         $wherePlaceHolders = [];
-        foreach ($where as $column => $value){
-            $whereSql []= "$column=:$column";
+        foreach ($where as $column => $value) {
+            $whereSql [] = "$column=:$column";
             $wherePlaceHolders[":$column"] = $value;
         }
         $whereSql = implode(" $operator ", $whereSql);
 
         $sql .= $whereSql;
         $this->where .= $sql;
-        $this->wherePlaceholder = $wherePlaceHolders;
+        $this->wherePlaceholder = array_merge($this->wherePlaceholder, $wherePlaceHolders);
+
         return $this;
     }
 
+    /**
+     * @throws Exception
+     */
     public function insert(array $data): bool
     {
 
         $columns = array_keys($data);
         $valuesPlaceHolders = [];
-        foreach ($data as $column => $value){
+        foreach ($data as $column => $value) {
             $valuesPlaceHolders[":$column"] = $value;
         }
         $columns = implode(',', $columns);
@@ -106,8 +112,7 @@ class MySQLConnection
         try {
             return $preparedStmt->execute($valuesPlaceHolders);
         } catch (Exception $e) {
-
-            return false;
+            throw new Exception($e->getMessage());
         }
     }
 
@@ -124,21 +129,23 @@ class MySQLConnection
         }
         $valuesPlaceholder = implode(",", $valuesPlaceholder);
         $sql .= $valuesPlaceholder;
-        if(!empty($this->where))
+        if (!empty($this->where))
             $sql .= $this->where;
         $prepareStmt = $this->connection->prepare($sql);
         /* here we have both : 1 where clause bind params and : 2 update set clause bind params
          so we have to merge them
         */
-        $mergeParams = array_merge($bindParamsOfSetQuery,$this->wherePlaceholder);
+        $mergeParams = array_merge($bindParamsOfSetQuery, $this->wherePlaceholder);
+
         return $prepareStmt->execute($mergeParams);
     }
 
     public function delete(): bool
     {
         $sql = "DELETE FROM $this->table";
-        if(!empty($this->where))
+        if (!empty($this->where))
             $sql .= $this->where;
+
         $prepareStmt = $this->connection->prepare($sql);
         // bind params of where clause (if there is no where constraint it is an empty array and no problem will occur)
         return $prepareStmt->execute($this->wherePlaceholder);
@@ -146,13 +153,13 @@ class MySQLConnection
 
     public function select(array $columns = ['*'])
     {
-        $sql = "SELECT " . implode(", ", $columns). " FROM " . $this->table;
-        if(!empty($this->where))
+        $sql = "SELECT " . implode(", ", $columns) . " FROM " . $this->table;
+        if (!empty($this->where))
             $sql .= $this->where;
         $prepareStmt = $this->connection->prepare($sql);
         // bind params of where clause (if there is no where constraint it is an empty array and no problem will occur)
         $prepareStmt->execute($this->wherePlaceholder);
-        return $prepareStmt->fetchAll();
+        return $prepareStmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function lastInsertedId()

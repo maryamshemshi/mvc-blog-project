@@ -8,13 +8,14 @@ use App\Models\Posts;
 use App\Request;
 use App\View;
 use DateTime;
+use function redirect;
 
 class HomeController
 {
     public function homeIndexView()
     {
         $posts = new Posts();
-        $result = $posts->get();
+        $result = $posts->hasLiked();
 
         if ($result) {
             View::render("main", "views\index", ['result' => $result, 'continue' => ['false']]);
@@ -43,8 +44,14 @@ class HomeController
 
     public function myNews()
     {
+        if (!isset($_SESSION['userInfo']) || !isset($_SESSION['userInfo']['id'])) {
+            View::render("error", "views\index", ['message' => "You must be logged in to view your news."]);
+            return;
+        }
+
+        $user_id = $_SESSION['userInfo']['id'];
         $posts = new Posts();
-        $result = $posts->where('user_id', $_SESSION['userInfo']['id'])->get();
+        $result = $posts->where('user_id', $user_id)->get();
 
         View::render("main", "views/news", ['result' => $result, 'continue' => ['myNews']]);
     }
@@ -73,7 +80,7 @@ class HomeController
         $result = $posts->create($data);
 
         if ($result) {
-            \redirect('/myNews');
+            redirect('/myNews');
         } else {
             View::render("error", "views\index", ['message' => 'Sorry, Your New Post Not Insert. Please Try Again.']);
         }
@@ -107,7 +114,7 @@ class HomeController
         $posts = new Posts();
         $result = $posts->where('id', $id)->update($data);
         if ($result) {
-            \redirect("/myNews");
+            redirect("/myNews");
         } else {
             View::render("error", "views\index", ['message' => 'Sorry, Your Edit Post Not Successfully, Please Try Again.^^']);
         }
@@ -120,7 +127,7 @@ class HomeController
         $posts = new Posts();
         $result = $posts->where('id', $id)->delete();
         if ($result) {
-            \redirect('/myNews');
+            redirect('/myNews');
         } else {
             View::render("error", "views\index", ['message' => "Sorry, Your Post Isn't Deleted, Please Try Again.^^"]);
         }
@@ -133,7 +140,7 @@ class HomeController
         $likes = new Likes();
         $result = $likes->create($data);
         if ($result) {
-            \redirect('/');
+            redirect('/');
         }
     }
 
@@ -141,11 +148,14 @@ class HomeController
     {
         $posts_id = Request::getData()['id'];
         $user_id = $_SESSION['userInfo']['id'];
+
         $likes = new Likes();
-        $result = $likes->where('news_id', $posts_id)->where('user_id', $user_id)->delete();
-        if ($result) {
-            \redirect('/myNews');
-        }
+
+        $likes->where('news_id', $posts_id)
+            ->where('user_id', $user_id)
+            ->delete();
+
+        redirect('/');
     }
 
     public function showComment()
@@ -168,7 +178,7 @@ class HomeController
         $comments = new Comments();
         $result = $comments->create($data);
         if ($result) {
-            \redirect("\comment?id=$posts_id");
+            redirect("\comment?id=$posts_id");
         } else {
             View::render("error", "views\index", ['message' => 'Sorry, Your Comment Is Not Inserted, Please Try Again.']);
         }

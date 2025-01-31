@@ -1,21 +1,24 @@
 <html>
-<head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
-</head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
-    <a class="navbar-brand" href="#" style="margin-bottom: 5.5px; padding: 8px; margin-inline-end: 8px; font-size: smaller; align-items: center">Tux News<div class="logo-image">
-            <img src="https://training.linuxfoundation.org/wp-content/uploads/2021/03/TuxRewards_Badge.svg" class="img-fluid" style="align-items: center">
-        </div></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand" href="#"
+       style="margin-bottom: 5.5px; padding: 8px; margin-inline-end: 8px; font-size: smaller; align-items: center">Tux
+        News
+        <div class="logo-image">
+            <img src="https://training.linuxfoundation.org/wp-content/uploads/2021/03/TuxRewards_Badge.svg"
+                 class="img-fluid" style="align-items: center">
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03"
+            aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarColor03">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="/index">Home <span class="sr-only"></span></a>
+                <a class="nav-link" href="/">Home <span class="sr-only"></span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/contactUs">Contact</a>
@@ -23,24 +26,22 @@
             <li class="nav-item">
                 <a class="nav-link" href="/aboutUs">About</a>
             </li>
-            <?php
-            if (isset($name)):
-            ?>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Hi <?=$name?></a>
-            </li>
-            <?php
-            endif;
 
-            if(!empty($_SESSION['user'])) : ?>
+
+            <?php
+            if (!empty($_SESSION['userInfo'])) : ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Hi <?= $_SESSION['userInfo']['user_name'] ?></a>
+                </li>
                 <li class="nav-item ms-auto">
                     <a class="nav-link ml-auto" href="/logout">Logout</a>
                 </li>
+                <a href="/addNews"><img src="/public/Images/addpost.png"></a>
             <?php else : ?>
                 <li class="nav-item ms-auto">
                     <a class="nav-link ml-auto" href="/login">Login</a>
                 </li>
-            <?php endif;  ?>
+            <?php endif; ?>
         </ul>
         <form class="form-inline" style="justify-content: center;">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
@@ -50,7 +51,9 @@
         </form>
     </div>
 </nav>
+
 [contents]
+
 <footer class="bg-body-tertiary text-center">
     <div class="container p-4 pb-0">
         <section class="">
@@ -63,7 +66,7 @@
                     </div>
                     <div class="col-md-5 col-12">
                         <div data-mdb-input-init class="form-outline mb-4">
-                            <input type="email" id="form5Example26" class="form-control" />
+                            <input type="email" id="form5Example26" class="form-control"/>
                             <label class="form-label" for="form5Example26">Email address</label>
                         </div>
                     </div>
@@ -81,8 +84,8 @@
     </div>
 </footer>
 <script>
-    import { Input, initMDB } from "mdb-ui-kit";
+    import {Input, initMDB} from "mdb-ui-kit";
 
-    initMDB({ Input });</script>
+    initMDB({Input});</script>
 </body>
 </html>

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Models;
-class Likes extends Model{
+class Likes extends Model
+{
     protected $table = 'likes';
 }

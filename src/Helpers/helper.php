@@ -3,13 +3,14 @@
 use App\Models\Likes;
 
 function redirect(string $url){
-    header('Location: http://127.0.0.1:80'.$url);
+    header('Location: '.$url);
 }
 
-function customDump(...$arg){
+function dd(...$arg){
     echo "<pre>";
     var_dump($arg);
     echo "</pre>";
+    die;
 }
 
 
